@@ -1,0 +1,10 @@
+# пример GET запроса
+GET https://jsonplaceholder.typicode.com/posts/1
+
+###
+
+GET https://jsonplaceholder.typicode.com/posts/
+
+###
+
+http://127.0.0.1:8000/api/recipes/

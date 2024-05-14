@@ -124,7 +124,7 @@ const Card = ({
           >
             <Icons.LikeIcon />
           </Button>
-          <Tooltip id={id} />
+          <Tooltip id={id.toString()} />
         </div>
       </div>
     </div>
