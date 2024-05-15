@@ -1,15 +1,12 @@
 import os
 from pathlib import Path
+from dotenv import load_dotenv
+
+load_dotenv()
 
 BASE_DIR = Path(__file__).resolve().parent.parent
 
-# dotenv_file = os.path.join(BASE_DIR, ".env")
-# if os.path.isfile(dotenv_file):
-#     dotenv.load_dotenv(dotenv_file)
-
-SECRET_KEY = 'django-insecure-g^50*nk_t2*1hnnf7f9b4fl+Flpd73u5Fvc_y%0yv86g-ui6wF'
-# SECRET_KEY = os.environ['SECRET_KEY']
-# SECRET_KEY = os.getenv('SECRET_KEY', )
+SECRET_KEY = os.getenv('SECRET_KEY', )
 
 DEBUG = True
 
@@ -123,7 +120,7 @@ MEDIA_URL = '/backend_media/'
 MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
 
 
-STATICFILES_DIRS = ((BASE_DIR / 'static/'),)
+# STATICFILES_DIRS = ((BASE_DIR / 'static/'),)
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
