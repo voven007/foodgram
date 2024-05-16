@@ -45,7 +45,7 @@ jobs:
         pip install -r ./backend/requirements.txt 
     # Запускаем flake8
     # Этот шаг дополним переменными для доступа к БД
-    - name: Test with flake8 and django tests
+    - name: Test with flake8
     # Добавляем env-переменные для доступа к БД
       # env:
       #   POSTGRES_USER: ${POSTGRES_USER}

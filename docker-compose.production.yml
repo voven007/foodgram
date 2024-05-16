@@ -25,7 +25,7 @@ services:
       - /frontend/:/app/result_build/
   nginx:
     container_name: foodgram-proxy
-    image: nginx:1.25.4-alpine
+    image: vababenko/foodgram_nginx
     ports:
       - "8000:80"
     volumes:
