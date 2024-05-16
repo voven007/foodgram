@@ -2,40 +2,31 @@ import random
 import string
 
 from django.db.models import Sum
-from django.shortcuts import get_object_or_404, redirect
 from django.http import Http404, HttpResponse
+from django.shortcuts import get_object_or_404, redirect
 from django_filters.rest_framework import DjangoFilterBackend
 from djoser.views import UserViewSet
+from recipes.models import (Favorite, Ingredient, IngredientInRecipe, Link,
+                            Recipe, ShoppingCart, Tag)
 from rest_framework import status, viewsets
 from rest_framework.decorators import action
 from rest_framework.generics import ListAPIView
-from rest_framework.permissions import (
-    SAFE_METHODS, AllowAny, IsAuthenticated, IsAuthenticatedOrReadOnly)
+from rest_framework.permissions import (SAFE_METHODS, AllowAny,
+                                        IsAuthenticated,
+                                        IsAuthenticatedOrReadOnly)
 from rest_framework.response import Response
 from rest_framework.views import APIView
+from users.models import Subscription, User
+
+from api.serializers import (CustomUserSerializer, IngredientSerializer,
+                             RecipeSerializer, RecipesShortSerializer,
+                             RecipeWriteSerializer, ShortLinkSerialiser,
+                             SubscribedSerislizer, SubscriptionsSerializer,
+                             TagSerializer, UserAvatarSerialiser)
+
 from .filters import IngredientFilter, RecipeFilter
 from .paginators import PageLimitPagination
-from .permissions import (IsOwnerAdminOrReadOnly)
-from api.serializers import (
-    IngredientSerializer,
-    TagSerializer,
-    UserAvatarSerialiser,
-    CustomUserSerializer,
-    RecipeSerializer,
-    RecipeWriteSerializer,
-    RecipesShortSerializer,
-    SubscriptionsSerializer,
-    SubscribedSerislizer,
-    ShortLinkSerialiser)
-from recipes.models import (
-    Ingredient,
-    Tag,
-    Recipe,
-    Link,
-    Favorite,
-    ShoppingCart,
-    IngredientInRecipe)
-from users.models import User, Subscription
+from .permissions import IsOwnerAdminOrReadOnly
 
 
 class IngredientViewSet(viewsets.ReadOnlyModelViewSet):
