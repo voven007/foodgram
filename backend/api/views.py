@@ -1,6 +1,11 @@
 import random
 import string
 
+from api.serializers import (CustomUserSerializer, IngredientSerializer,
+                             RecipeSerializer, RecipesShortSerializer,
+                             RecipeWriteSerializer, ShortLinkSerialiser,
+                             SubscribedSerislizer, SubscriptionsSerializer,
+                             TagSerializer, UserAvatarSerialiser)
 from django.db.models import Sum
 from django.http import Http404, HttpResponse
 from django.shortcuts import get_object_or_404, redirect
@@ -17,12 +22,6 @@ from rest_framework.permissions import (SAFE_METHODS, AllowAny,
 from rest_framework.response import Response
 from rest_framework.views import APIView
 from users.models import Subscription, User
-
-from api.serializers import (CustomUserSerializer, IngredientSerializer,
-                             RecipeSerializer, RecipesShortSerializer,
-                             RecipeWriteSerializer, ShortLinkSerialiser,
-                             SubscribedSerislizer, SubscriptionsSerializer,
-                             TagSerializer, UserAvatarSerialiser)
 
 from .filters import IngredientFilter, RecipeFilter
 from .paginators import PageLimitPagination

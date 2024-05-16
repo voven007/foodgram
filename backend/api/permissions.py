@@ -1,5 +1,4 @@
 from rest_framework.permissions import SAFE_METHODS, BasePermission
-
 from users.models import ADMIN
 
 

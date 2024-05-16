@@ -161,7 +161,7 @@ jobs:
           context: ./nginx/
           push: true
           # Тут вместо username должен быть ваш логин на Docker Hub
-          tags: vababenko/kittygram_gateway:latest
+          tags: vababenko/foodgram_gateway:latest
   deploy:
     runs-on: ubuntu-latest
     needs: 
