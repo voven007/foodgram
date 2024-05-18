@@ -16,7 +16,7 @@ services:
     image: vababenko/foodgram_backend:latest
     env_file: .env
     volumes:
-      - static:/backend_static
+      - static:/var/html/backend_static
       - media:/app/media
     depends_on:
       - db
