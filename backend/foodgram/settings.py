@@ -113,7 +113,7 @@ USE_L10N = True
 USE_TZ = True
 
 
-STATIC_URL = '/backend_static/'
+STATIC_URL = '/static/'
 STATIC_ROOT = os.path.join(BASE_DIR, 'backend_static')
 
 
