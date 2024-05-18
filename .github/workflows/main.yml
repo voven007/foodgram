@@ -144,6 +144,8 @@ jobs:
         # с которым установлено соединение
         script: |
           cd foodgram
+          # Удалит старые, не используемые образы
+          sudo docker system prune -f
           # Выполняет pull образов с Docker Hub
           sudo docker compose -f docker-compose.production.yml pull
           # Перезапускает все контейнеры в Docker Compose
