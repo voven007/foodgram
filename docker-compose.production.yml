@@ -12,7 +12,8 @@ services:
     volumes:
       - pg_data:/var/lib/postgresql/data
   backend:
-    image: vababenko/foodgram_backend
+    container_name: foodgram-back
+    image: vababenko/foodgram_backend:latest
     env_file: .env
     volumes:
       - static:/backend_static
@@ -20,12 +21,13 @@ services:
     depends_on:
       - db
   frontend:
-    image: vababenko/foodgram_frontend
+    container_name: foodgram-front
+    image: vababenko/foodgram_frontend:latest
     volumes:
-      - /frontend/:/app/result_build/
+      - ./frontend/:/app/result_build/
   nginx:
     container_name: foodgram-proxy
-    image: vababenko/foodgram_nginx
+    image: vababenko/foodgram_nginx:latest
     ports:
       - "8000:80"
     volumes:
