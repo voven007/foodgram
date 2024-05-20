@@ -1,11 +1,6 @@
 import random
 import string
 
-from api.serializers import (CustomUserSerializer, IngredientSerializer,
-                             RecipeSerializer, RecipesShortSerializer,
-                             RecipeWriteSerializer, ShortLinkSerialiser,
-                             SubscribedSerislizer, SubscriptionsSerializer,
-                             TagSerializer, UserAvatarSerialiser)
 from django.db.models import Sum
 from django.http import Http404, HttpResponse
 from django.shortcuts import get_object_or_404, redirect
@@ -22,6 +17,12 @@ from rest_framework.permissions import (SAFE_METHODS, AllowAny,
 from rest_framework.response import Response
 from rest_framework.views import APIView
 from users.models import Subscription, User
+
+from api.serializers import (CustomUserSerializer, IngredientSerializer,
+                             RecipeSerializer, RecipesShortSerializer,
+                             RecipeWriteSerializer, ShortLinkSerialiser,
+                             SubscribedSerislizer, SubscriptionsSerializer,
+                             TagSerializer, UserAvatarSerialiser)
 
 from .filters import IngredientFilter, RecipeFilter
 from .paginators import PageLimitPagination
@@ -59,21 +60,6 @@ class UserViewSet(UserViewSet):
         if self.action == 'me':
             self.permission_classes = (IsAuthenticated,)
         return super().get_permissions()
-
-    """
-    Доработать после решения всех проблем.
-    @action(detail=False,
-            permission_classes=[IsAuthenticated, ],
-            serializer_class=SubscriptionsSerializer,
-            url_path='subscriptions', url_name='subscriptions'
-            )
-    def subscriptions(self, request):
-        Метод для отображения списка подписок пользователя.
-        Реализация эндпоинта users/subscriptions/
-
-        user = self.request.user
-        return user.subscriber.all()
-    """
 
     @action(detail=True, methods=['POST', 'DELETE'],
             permission_classes=(IsAuthenticated,),
@@ -150,11 +136,8 @@ class RecipeViewSet(viewsets.ModelViewSet):
             return RecipeSerializer
         return RecipeWriteSerializer
 
-    @action(detail=True, methods=['POST', 'DELETE'],
-            permission_classes=[IsAuthenticated],
-            url_path='favorite', url_name='favorite',)
-    def favorite(self, request, pk):
-        """Метод для управления избранными подписками """
+    def general_method(self, request, pk, model):
+        """Vетод для управления избранными подписками и списком покупок"""
         user = request.user
         if request.method == 'POST':
             try:
@@ -163,13 +146,12 @@ class RecipeViewSet(viewsets.ModelViewSet):
                 return Response('Рецепт не найден',
                                 status=status.HTTP_400_BAD_REQUEST)
 
-            if Favorite.objects.filter(user=user, recipe=recipe).exists():
+            if model.objects.filter(user=user, recipe=recipe).exists():
                 return Response(
-                    {'errors': f'Повторно - \"{recipe.name}\" добавить нельзя,'
-                               f'он уже есть в избранном у пользователя'},
+                    {'errors': f'Повторно-\"{recipe.name}\" добавить нельзя'},
                     status=status.HTTP_400_BAD_REQUEST
                 )
-            Favorite.objects.create(user=user, recipe=recipe)
+            model.objects.create(user=user, recipe=recipe)
             serializer = RecipesShortSerializer(recipe)
             return Response(serializer.data, status=status.HTTP_201_CREATED)
 
@@ -179,7 +161,7 @@ class RecipeViewSet(viewsets.ModelViewSet):
             except Http404:
                 return Response('Рецепт не найден',
                                 status=status.HTTP_404_NOT_FOUND)
-            obj = Favorite.objects.filter(user=user, recipe=recipe)
+            obj = model.objects.filter(user=user, recipe=recipe)
             if obj.exists():
                 obj.delete()
                 return Response(status=status.HTTP_204_NO_CONTENT)
@@ -191,43 +173,18 @@ class RecipeViewSet(viewsets.ModelViewSet):
 
     @action(detail=True, methods=['POST', 'DELETE'],
             permission_classes=[IsAuthenticated],
+            url_path='favorite', url_name='favorite',)
+    def favorite(self, request, pk):
+        """Метод для управления избранными подписками """
+        return self.general_method(request, pk, Favorite)
+
+    @action(detail=True, methods=['POST', 'DELETE'],
+            permission_classes=[IsAuthenticated],
             url_path='shopping_cart', url_name='shopping_cart',
             )
     def shopping_cart(self, request, pk):
         """Метод для управления списком покупок"""
-        user = request.user
-        if request.method == 'POST':
-            try:
-                recipe = get_object_or_404(Recipe, id=pk)
-            except Http404:
-                return Response('Рецепт не найден',
-                                status=status.HTTP_400_BAD_REQUEST)
-            if ShoppingCart.objects.filter(user=user, recipe=recipe).exists():
-                return Response(
-                    {'errors': f'Повторно - \"{recipe.name}\" добавить нельзя,'
-                               f'он уже есть в списке покупок'},
-                    status=status.HTTP_400_BAD_REQUEST
-                )
-            ShoppingCart.objects.create(user=user, recipe=recipe)
-            serializer = RecipesShortSerializer(recipe)
-            return Response(serializer.data, status=status.HTTP_201_CREATED)
-
-        if request.method == 'DELETE':
-            try:
-                recipe = get_object_or_404(Recipe, id=pk)
-            except Http404:
-                return Response('Рецепт не найден',
-                                status=status.HTTP_404_NOT_FOUND)
-            obj = ShoppingCart.objects.filter(user=user, recipe__id=pk)
-            if obj.exists():
-                obj.delete()
-                return Response(status=status.HTTP_204_NO_CONTENT)
-            return Response(
-                {'errors': f'Нельзя удалить рецепт - \"{recipe.name}\", '
-                           f'которого нет в списке покупок '},
-                status=status.HTTP_400_BAD_REQUEST
-            )
-        return Response(status=status.HTTP_405_METHOD_NOT_ALLOWED)
+        return self.general_method(request, pk, ShoppingCart)
 
     @staticmethod
     def ingredients_to_txt(ingredients):
@@ -250,7 +207,6 @@ class RecipeViewSet(viewsets.ModelViewSet):
     def download_shopping_cart(self, request):
         """Метод для загрузки ингредиентов и их количества
          для выбранных рецептов"""
-
         ingredients = IngredientInRecipe.objects.filter(
             recipe__recipe_shopping__user=request.user
         ).values(

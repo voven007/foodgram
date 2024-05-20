@@ -39,15 +39,14 @@ class RecipeAdmin(admin.ModelAdmin):
     empty_value_display = 'Не задано'
 
     @admin.display(description="Добавлено в избранное")
-    def number_to_favorites(self, recipe):
-        return recipe.recipe_favorite.count()
+    def number_to_favorites(self, obj):
+        return Favorite.objects.filter(recipe=obj).count()
 
 
 class FavoriteAdmin(admin.ModelAdmin):
     list_display = (
         'recipe',
-        'user',
-        'favorite_date',)
+        'user',)
     list_editable = ()
     search_fields = ('recipe',)
     list_filter = ()

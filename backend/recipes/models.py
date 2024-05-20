@@ -83,7 +83,7 @@ class Recipe(models.Model):
         related_name='tag_recipe',
         verbose_name='Теги'
     )
-    cooking_time = models.IntegerField(
+    cooking_time = models.PositiveSmallIntegerField(
         verbose_name='Время приготовления (в минутах)',
         validators=[
             MinValueValidator(
@@ -135,11 +135,6 @@ class Link(models.Model):
     def __str__(self):
         return self.short_link
 
-    # def save(self, *args, **kwargs):
-    #     if not self.short_link:
-    #         self.short_link = str(uuid.uuid4())[:6]
-    #     super().save(*args, **kwargs)
-
 
 class IngredientInRecipe(models.Model):
     """Модель количества ингредиента в рецепте"""
@@ -155,7 +150,7 @@ class IngredientInRecipe(models.Model):
         related_name='ingredient_list',
         verbose_name='Ингредиент'
     )
-    amount = models.IntegerField(
+    amount = models.PositiveSmallIntegerField(
         verbose_name='Количество ингредиента',
         default=1,
         validators=[
@@ -175,20 +170,25 @@ class IngredientInRecipe(models.Model):
         return f'{self.ingredient} – {self.amount}'
 
 
-class Favorite(models.Model):
-    """Модель избранного"""
+class BaseModel(models.Model):
+    """Базовая модель"""
     user = models.ForeignKey(
         User,
         on_delete=models.CASCADE,
-        related_name='user_favorite',
         verbose_name='Пользователь'
     )
     recipe = models.ForeignKey(
         Recipe,
         on_delete=models.CASCADE,
-        related_name='recipe_favorite',
         verbose_name='Рецепт'
     )
+
+    class Meta:
+        abstract = True
+
+
+class Favorite(BaseModel):
+    """Модель избранного"""
     favorite_date = models.DateTimeField(
         verbose_name='Дата добавления в избранное',
         auto_now_add=True
@@ -196,6 +196,7 @@ class Favorite(models.Model):
 
     class Meta:
         ordering = ('favorite_date',)
+        default_related_name = 'recipe_favorites'
         verbose_name = 'Избранный рецепт'
         verbose_name_plural = 'Избранные рецепты'
         constraints = [
@@ -209,23 +210,12 @@ class Favorite(models.Model):
         return f'{self.user} добавил "{self.recipe}" в Избранное'
 
 
-class ShoppingCart(models.Model):
+class ShoppingCart(BaseModel):
     """Модель списка покупок"""
-    user = models.ForeignKey(
-        User,
-        on_delete=models.CASCADE,
-        related_name='user_shopping',
-        verbose_name='Пользователь'
-    )
-    recipe = models.ForeignKey(
-        Recipe,
-        on_delete=models.CASCADE,
-        related_name='recipe_shopping',
-        verbose_name='Рецепт'
-    )
 
     class Meta:
         ordering = ('user',)
+        default_related_name = 'recipe_shopping'
         verbose_name = 'Список покупок'
         verbose_name_plural = 'Списки покупок'
         constraints = [
