@@ -1,6 +1,7 @@
 from django.core.validators import MinValueValidator, RegexValidator
 from django.db import models
 from rest_framework.reverse import reverse
+
 from users.models import User
 
 

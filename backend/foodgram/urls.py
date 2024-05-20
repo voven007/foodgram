@@ -1,6 +1,7 @@
-from api.views import redirect_to_full_link
 from django.contrib import admin
 from django.urls import include, path
+
+from api.views import redirect_to_full_link
 
 urlpatterns = [
     path('admin/', admin.site.urls),
