@@ -1,9 +1,10 @@
 from djoser.serializers import UserSerializer
 from recipes.models import (Favorite, Ingredient, IngredientInRecipe, Link,
                             Recipe, ShoppingCart, Tag)
-from backend.api.fields import Base64ImageField
 from rest_framework import serializers
 from users.models import Subscription, User
+
+from backend.api.fields import Base64ImageField
 
 
 class UserAvatarSerialiser(serializers.ModelSerializer):
