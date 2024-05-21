@@ -1,5 +1,5 @@
-from backend.api.fields import Base64ImageField
 from djoser.serializers import UserSerializer
+from backend.api.fields import Base64ImageField
 from recipes.models import (Favorite, Ingredient, IngredientInRecipe, Link,
                             Recipe, ShoppingCart, Tag)
 from rest_framework import serializers
