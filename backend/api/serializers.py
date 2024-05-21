@@ -4,7 +4,7 @@ from recipes.models import (Favorite, Ingredient, IngredientInRecipe, Link,
 from rest_framework import serializers
 from users.models import Subscription, User
 
-from backend.api.fields import Base64ImageField
+from api.fields import Base64ImageField
 
 
 class UserAvatarSerialiser(serializers.ModelSerializer):
