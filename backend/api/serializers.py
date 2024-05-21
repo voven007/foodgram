@@ -1,5 +1,5 @@
+from backend.api.fields import Base64ImageField
 from djoser.serializers import UserSerializer
-from drf_extra_fields.fields import Base64ImageField
 from recipes.models import (Favorite, Ingredient, IngredientInRecipe, Link,
                             Recipe, ShoppingCart, Tag)
 from rest_framework import serializers
@@ -292,7 +292,6 @@ class RecipesShortSerializer(serializers.ModelSerializer):
                   'name',
                   'image',
                   'cooking_time',)
-        # read_only_fields = ('__all__',)
 
 
 class ShowFollowSerializer(serializers.ModelSerializer):

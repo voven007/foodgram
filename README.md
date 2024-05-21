@@ -46,6 +46,6 @@ docker-compose.prodaction up
 sudo docker compose -f docker-compose.production.yml exec python manage.py import
 ```
 <p>
-    Login admin: foodadmin<br>
-    Pass admin: Zaqwer123<br>
+    Login admin: <br>
+    Pass admin: <br>
 </p>

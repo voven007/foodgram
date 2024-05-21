@@ -196,7 +196,7 @@ class Favorite(BaseModel):
 
     class Meta:
         ordering = ('favorite_date',)
-        default_related_name = 'recipe_favorites'
+        default_related_name = 'recipe_favorite'
         verbose_name = 'Избранный рецепт'
         verbose_name_plural = 'Избранные рецепты'
         constraints = [
