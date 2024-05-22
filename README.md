@@ -46,6 +46,7 @@ docker-compose.prodaction up
 sudo docker compose -f docker-compose.production.yml exec python manage.py import
 ```
 <p>
-    Login admin: <br>
-    Pass admin: <br>
+    url: <a href="https://foodgramm.gotdns.ch/">foodgramm.gotdns.ch</a><br>
+    Login admin: foodadmin@mail.ru<br>
+    Pass admin: Zaqwer123<br>
 </p>
