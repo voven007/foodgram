@@ -6,10 +6,10 @@ from .views import (GetShortLink, IngredientViewSet, RecipeViewSet,
 
 app_name = 'api'
 router = DefaultRouter()
-router.register('recipes', RecipeViewSet, basename='recipe')
-router.register('tags', TagViewSet, basename='tag')
-router.register('ingredients', IngredientViewSet, basename='ingredient')
-router.register('users', UserViewSet, basename='user')
+router.register('recipes', RecipeViewSet, basename='recipes')
+router.register('tags', TagViewSet, basename='tags')
+router.register('ingredients', IngredientViewSet, basename='ingredients')
+router.register('users', UserViewSet, basename='users')
 
 urlpatterns = [
     path('recipes/<int:recipe_id>/get-link/', GetShortLink.as_view()),
