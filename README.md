@@ -1,5 +1,5 @@
 
-<h1 align="center">Продуктовый помощник FOODGRAM</h1>
+<h1 align="center">Продуктовый помощник</h1>
 
 <h2 align="center">Описание</h2>
 
